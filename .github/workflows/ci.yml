@@ -23,7 +23,7 @@ jobs:
           node-version: "20"
 
       - name: 📦 Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: 🧪 Run Vitest
         # We use 'run' instead of just 'vitest' so it doesn't hang in watch mode!
