@@ -1,0 +1,30 @@
+name: Node.js CI Pipeline
+
+# 1. When should the robot run?
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    # 2. What kind of computer should the robot use?
+    runs-on: ubuntu-latest
+
+    # 3. What steps should it take?
+    steps:
+      - name: 📥 Download the code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🧪 Run Vitest
+        # We use 'run' instead of just 'vitest' so it doesn't hang in watch mode!
+        run: npx vitest run

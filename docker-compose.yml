@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  # 1. The Database Container
+  postgres-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: coingeckodb
+    ports:
+      - "5433:5432" # Maps your laptop's 5433 to the container's 5432
+
+  # 2. Your Node.js API Container
+  finance-api:
+    build: . # Tells Docker to use the Dockerfile we just wrote
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=postgres-db # Overrides 'localhost' to point to the DB container!
+      - DB_PORT=5432
+    depends_on:
+      - postgres-db # Tells the API to wait for the DB to start first
