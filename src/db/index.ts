@@ -6,12 +6,16 @@ console.log(
 );
 
 export const pool = new Pool({
-  user: "postgres",
-  host: process.env.DB_HOST || "localhost",
-  database: "coingeckodb",
-  password: "password123",
-  // Force it to parse the env var, or fallback to 5433 locally
-  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5433,
+  // If Render gives us a DATABASE_URL, use it! Otherwise, fall back to our local Docker setup.
+  ...(process.env.DATABASE_URL
+    ? { connectionString: process.env.DATABASE_URL }
+    : {
+        user: "postgres",
+        password: "password123",
+        database: "coingeckodb",
+        host: process.env.DB_HOST || "localhost",
+        port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+      }),
 });
 
 export async function initDB() {
